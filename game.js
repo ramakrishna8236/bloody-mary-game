@@ -267,7 +267,7 @@ class BloodyMaryGame {
 
         this.dom.ghostEntity.className = 'ghost-entity';
         this.dom.clawHand.className = 'claw-hand';
-        this.dom.crackSvg.className = 'crack-svg';
+        this.dom.crackSvg.classList.remove('cracked', 'shattered');
         this.dom.bloodDrips.className = 'blood-drips-container';
         this.dom.candleFlame.className = 'candle-flame';
         this.dom.smokePuff.className = 'smoke-puff';
