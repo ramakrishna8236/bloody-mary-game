@@ -14,14 +14,32 @@ class SoundFX {
     init() {
         if (!this.ctx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) {
+                throw new Error('Web Audio API is not supported by this browser.');
+            }
             this.ctx = new AudioContext();
             this.masterGain = this.ctx.createGain();
             this.masterGain.gain.setValueAtTime(0.7, this.ctx.currentTime);
             this.masterGain.connect(this.ctx.destination);
         }
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+        if (this.ctx.state !== 'running') {
+            this.ctx.resume().catch(error => {
+                console.warn('Unable to resume audio:', error);
+            });
         }
+    }
+
+    async unlock() {
+        this.init();
+        if (this.ctx.state !== 'running') {
+            const silentBuffer = this.ctx.createBuffer(1, 1, this.ctx.sampleRate);
+            const unlockSound = this.ctx.createBufferSource();
+            unlockSound.buffer = silentBuffer;
+            unlockSound.connect(this.masterGain);
+            unlockSound.start();
+            await this.ctx.resume();
+        }
+        return this.ctx.state === 'running';
     }
 
     toggleMute() {

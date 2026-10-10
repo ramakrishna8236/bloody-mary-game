@@ -281,7 +281,15 @@ class BloodyMaryGame {
     // Main Game Sequence
     async startRitual() {
         this.resetScene();
-        window.soundFX.init();
+        try {
+            const audioReady = await window.soundFX.unlock();
+            if (!audioReady) {
+                throw new Error('The browser kept the audio context suspended.');
+            }
+        } catch (error) {
+            console.warn('Unable to enable game audio:', error);
+            this.dom.audioToggleBtn.textContent = "⚠️ Audio unavailable";
+        }
         window.soundFX.startAtmosphericDrone();
         window.soundFX.startHeartbeatLoop(false);
 
