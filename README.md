@@ -6,12 +6,23 @@ A browser-based adaptation and enhancement of the Python text adventure **Bloody
 
 ## 🎮 How to Play
 
-You have two simple options to play:
+You can play the deployed website or run the game locally:
 
-### Option 1: Direct in Browser (No Server Needed)
+### Play Online
+Import this GitHub repository into [Vercel](https://vercel.com/new) and deploy it as a static site:
+
+1. Sign in to Vercel with GitHub and choose **Add New → Project**.
+2. Import `ramakrishna8236/bloody-mary-game`.
+3. Set **Framework Preset** to **Other** and **Root Directory** to `./`.
+4. Leave **Build Command** blank and set **Output Directory** to `.`.
+5. Select **Deploy**. Vercel will give you a public URL where the game can be played.
+
+After setup, pushes to the connected GitHub repository will trigger new deployments.
+
+### Run Locally: Direct in Browser (No Server Needed)
 Simply double-click [`index.html`](file:///d:/1%20AI%20Workflows/bloody-mary-game/index.html) in your file explorer to open and play directly in Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari!
 
-### Option 2: Run via Python Server
+### Run Locally: Python Server
 Run the included launcher in PowerShell or Command Prompt:
 ```bash
 python app.py
