@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloody Mary | Interactive Horror Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&family=Special+Elite&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="dark-atmosphere">
+
+    <!-- Screen Vignette & Grain Filter -->
+    <div class="vignette"></div>
+    <div class="crt-lines"></div>
+    <div class="blood-screen-spatter" id="screenSpatter"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="game-header">
+        <div class="header-left">
+            <span class="clock-display" id="clockDisplay">02:59 AM</span>
+            <span class="status-indicator">● BATHROOM OCCUPIED</span>
+        </div>
+        <div class="header-center">
+            <h1 class="game-title">BLOODY MARY</h1>
+        </div>
+        <div class="header-right">
+            <button id="endingsBtn" class="nav-btn" title="View unlocked endings">
+                📜 Endings: <span id="endingsCount">0/6</span>
+            </button>
+            <button id="audioToggleBtn" class="nav-btn" title="Toggle Sound">
+                🔊 Sound: ON
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="game-stage" id="gameStage">
+        
+        <!-- Scene Viewport (Mirror & Environment) -->
+        <div class="scene-viewport" id="sceneViewport">
+            
+            <!-- Haunted Mirror Frame -->
+            <div class="mirror-container" id="mirrorContainer">
+                <div class="mirror-frame">
+                    <div class="mirror-glass" id="mirrorGlass">
+                        
+                        <!-- Reflection effects -->
+                        <div class="reflection-fog"></div>
+                        
+                        <!-- Ghost Silhouette overlay -->
+                        <div class="ghost-entity" id="ghostEntity"></div>
+
+                        <!-- Claw hand reaches out -->
+                        <div class="claw-hand" id="clawHand"></div>
+
+                        <!-- Glass cracks overlay -->
+                        <svg class="crack-svg" id="crackSvg" viewBox="0 0 400 400">
+                            <!-- Cracks drawn dynamically or styled -->
+                            <path class="crack-line" d="M200,200 L160,140 L110,130 M160,140 L170,90 M200,200 L250,150 L310,160 M250,150 L270,100 M200,200 L180,270 L130,300 M180,270 L190,340 M200,200 L240,260 L290,290" />
+                        </svg>
+
+                        <!-- Dripping Blood -->
+                        <div class="blood-drips-container" id="bloodDripsContainer">
+                            <div class="blood-drop drop-1"></div>
+                            <div class="blood-drop drop-2"></div>
+                            <div class="blood-drop drop-3"></div>
+                            <div class="blood-drop drop-4"></div>
+                            <div class="blood-drop drop-5"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Candle in foreground -->
+                <div class="candle-setup" id="candleSetup">
+                    <div class="candle-stick">
+                        <div class="wax-drips"></div>
+                        <div class="candle-wick"></div>
+                        <div class="candle-flame" id="candleFlame">
+                            <div class="flame-inner"></div>
+                            <div class="flame-halo"></div>
+                        </div>
+                        <div class="smoke-puff" id="smokePuff"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Electrical Sparks Flash overlay -->
+            <div class="light-flash" id="lightFlash"></div>
+
+            <!-- Pitch Black Darkness overlay -->
+            <div class="darkness-overlay" id="darknessOverlay"></div>
+
+        </div>
+
+        <!-- Narrative Terminal Box -->
+        <section class="story-terminal">
+            <div class="terminal-header">
+                <span class="terminal-badge">DIARY OF THE SUMMONER</span>
+                <span class="speed-toggle" id="skipTypingBtn">⏩ Speed up</span>
+            </div>
+            
+            <div class="terminal-body" id="dialogueBox">
+                <!-- Text typed out here dynamically -->
+                <p class="dialogue-line active" id="currentDialogue">Press "Begin Ritual" to step into the dark bathroom...</p>
+            </div>
+
+            <!-- Panic Countdown Bar -->
+            <div class="timer-container" id="timerContainer">
+                <div class="timer-label">TIME TO REACT:</div>
+                <div class="timer-bar-track">
+                    <div class="timer-bar-fill" id="timerBarFill"></div>
+                </div>
+            </div>
+
+            <!-- Choices Container -->
+            <div class="choices-container" id="choicesContainer">
+                <!-- Choice buttons injected dynamically -->
+                <button class="choice-btn pulse-glow" id="startBtn">🕯️ BEGIN RITUAL</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Game Over / Victory Modal -->
+    <div class="modal-backdrop" id="resultModal">
+        <div class="modal-card" id="modalCard">
+            <div class="modal-banner" id="modalBanner">GAME OVER</div>
+            <h2 class="modal-title" id="modalTitle">BLOODY MARY CLAIMED YOUR SOUL</h2>
+            <div class="modal-badge" id="modalEndingTag">ENDING 2/6: DRAGGED UNDER</div>
+            <p class="modal-desc" id="modalDesc">She dragged you into the mirror world. You are never seen again.</p>
+            
+            <div class="modal-actions">
+                <button class="action-btn retry-btn" id="retryBtn">🔄 SUMMON AGAIN</button>
+                <button class="action-btn view-endings-btn" id="modalViewEndingsBtn">📜 ALL ENDINGS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endings Gallery Modal -->
+    <div class="modal-backdrop" id="endingsModal">
+        <div class="modal-card endings-card">
+            <div class="modal-header-row">
+                <h2>Unlocked Endings (<span id="galleryCount">0/6</span>)</h2>
+                <button class="close-btn" id="closeEndingsBtn">&times;</button>
+            </div>
+            <p class="subtext">Every choice in the dark bathroom holds a consequence. Can you discover all 6 fates?</p>
+            
+            <div class="endings-grid" id="endingsGrid">
+                <!-- Filled dynamically by JavaScript -->
+            </div>
+
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="action-btn" id="resetProgressBtn" style="opacity: 0.7; font-size: 0.85rem;">Reset Discovered Endings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio & Game Engine Scripts -->
+    <script src="audio.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
